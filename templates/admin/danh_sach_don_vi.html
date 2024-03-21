@@ -1,0 +1,121 @@
+{% extends 'layout/admin_layout.html' %}
+
+{% block title %}Danh Sách Đơn Vị{% endblock %}
+
+{% block content %}
+    <h1 class="text-center text-uppercase">Danh Sách Đơn Vị</h1>
+    <button type="button" class="btn btn-success" onclick="showAddModal()">Thêm Đơn Vị</button>
+    <table class="table mt-3">
+        <thead>
+            <tr>
+                <th scope="col">Mã Đơn Vị</th>
+                <th scope="col">Tên Đơn Vị</th>
+                <th scope="col" class="text-center">Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for don_vi in list_don_vi %}
+                <tr>
+                    <td>{{ don_vi.ma_don_vi }}</td>
+                    <td>{{ don_vi.ten_don_vi }}</td>
+                    <td class="text-center">
+                        <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editCanBoModal{{ don_vi.ma_don_vi }}" onclick="showEditModal('{{ don_vi.ma_don_vi }}')">Sửa</a>
+                        <a href="#" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteCanBoModal{{ don_vi.ma_don_vi }}" onclick="showDeleteModal('{{ don_vi.ma_don_vi }}')">Xóa</a>
+                    </td>
+                    
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Add Modal -->
+    <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addodalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addModalLabel">Thêm Đơn Vị</h5>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="{{ url_for('don_vi_bp.them_don_vi') }}">
+                        <div class="form-group">
+                            <label for="ten_don_vi">Tên Đơn Vị:</label>
+                            <input type="text" name="ten_don_vi" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-3">Lưu</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% for don_vi in list_don_vi %}
+        <!-- Edit Modal for each Đơn Vị -->
+        <div class="modal fade" id="editModal{{ don_vi.ma_don_vi }}" tabindex="-1" role="dialog" aria-labelledby="editModalLabel{{ don_vi.ma_don_vi }}" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editModalLabel{{ don_vi.ma_don_vi }}">Sửa đơn vị</h5>
+                     
+                    </div>
+                    <div class="modal-body">
+                        <form method="post" action="{{ url_for('don_vi_bp.sua_don_vi', ma_don_vi=don_vi.ma_don_vi) }}">
+                            <div class="form-group">
+                                <label for="ten_don_vi">Tên đơn vị:</label>
+                                <input type="text" name="ten_don_vi" class="form-control" value="{{ don_vi.ten_don_vi }}" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary mt-5">Lưu</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete Modal for each Đơn Vị -->
+        <div class="modal fade" id="deleteModal{{ don_vi.ma_don_vi }}" tabindex="-1" role="dialog" aria-labelledby="deletedalLabel{{ don_vi.ma_don_vi }}" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel{{ don_vi.ma_don_vi }}">Xác nhận xóa</h5>
+                   
+                    </div>
+                    <div class="modal-body">
+                        <p>Bạn có chắc chắn muốn xóa đơn vị <strong>{{ don_vi.ten_don_vi }}</strong>?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="{{ url_for('don_vi_bp.xoa_don_vi', ma_don_vi=don_vi.ma_don_vi) }}" class="btn btn-danger">Xóa</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    
+    <script>
+        // Function to clear form input when modal is hidden
+        function clearFormInputs(modalId) {
+            document.querySelector(modalId).addEventListener('hidden.bs.modal', function (event) {
+                var form = this.querySelector('form');
+                if (form) {
+                    form.reset();
+                }
+            });
+        }
+    
+        // Show Add Đơn Vị Modal
+        function showAddModal() {
+            var modal = new bootstrap.Modal(document.getElementById('addModal'));
+            modal.show();
+        }
+
+        // Show Edit Đơn Vị Modal
+        function showEditModal(ma) {
+            var modal = new bootstrap.Modal(document.getElementById('editModal' + ma));
+            modal.show();
+        }
+
+        // Show Delete Đơn Vị Modal
+        function showDeleteModal(ma) {
+            var modal = new bootstrap.Modal(document.getElementById('deleteModal' + ma));
+            modal.show();
+        }
+    </script>
+{% endblock %}

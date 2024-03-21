@@ -1,0 +1,121 @@
+{% extends 'layout/admin_layout.html' %}
+
+{% block title %}Danh Sách Loại Văn Bản{% endblock %}
+
+{% block content %}
+    <h1 class="text-center text-uppercase">Danh Sách Loại Văn Bản</h1>
+    <button type="button" class="btn btn-success" onclick="showAddModal()">Thêm Loại Văn Bản</button>
+    <table class="table mt-3">
+        <thead>
+            <tr>
+                <th scope="col">Mã Loại Văn Bản</th>
+                <th scope="col">Tên Loại Văn Bản</th>
+                <th scope="col" class="text-center">Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for loai_van_ban in list_loai_van_ban %}
+                <tr>
+                    <td>{{ loai_van_ban.ma_loai_van_ban }}</td>
+                    <td>{{ loai_van_ban.ten_loai_van_ban }}</td>
+                    <td class="text-center">
+                        <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editCanBoModal{{ loai_van_ban.ma_loai_van_ban }}" onclick="showEditModal('{{ loai_van_ban.ma_loai_van_ban }}')">Sửa</a>
+                        <a href="#" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteCanBoModal{{ loai_van_ban.ma_loai_van_ban }}" onclick="showDeleteModal('{{ loai_van_ban.ma_loai_van_ban }}')">Xóa</a>
+                    </td>
+                    
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Add Modal -->
+    <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addodalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addModalLabel">Thêm Loại Văn Bản</h5>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="{{ url_for('loai_van_ban_bp.them_loai_van_ban') }}">
+                        <div class="form-group">
+                            <label for="ten_loai_van_ban">Tên Loại Văn Bản:</label>
+                            <input type="text" name="ten_loai_van_ban" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-3">Lưu</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% for loai_van_ban in list_loai_van_ban %}
+        <!-- Edit Modal for each Loại Văn Bản -->
+        <div class="modal fade" id="editModal{{ loai_van_ban.ma_loai_van_ban }}" tabindex="-1" role="dialog" aria-labelledby="editModalLabel{{ loai_van_ban.ma_loai_van_ban }}" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editModalLabel{{ loai_van_ban.ma_loai_van_ban }}">Sửa Loại Văn Bản</h5>
+                     
+                    </div>
+                    <div class="modal-body">
+                        <form method="post" action="{{ url_for('loai_van_ban_bp.sua_loai_van_ban', ma_loai_van_ban=loai_van_ban.ma_loai_van_ban) }}">
+                            <div class="form-group">
+                                <label for="ten_loai_van_ban">Tên Loại Văn Bản:</label>
+                                <input type="text" name="ten_loai_van_ban" class="form-control" value="{{ loai_van_ban.ten_loai_van_ban }}" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary mt-5">Lưu</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete Modal for each Loại Văn Bản -->
+        <div class="modal fade" id="deleteModal{{ loai_van_ban.ma_loai_van_ban }}" tabindex="-1" role="dialog" aria-labelledby="deletedalLabel{{ loai_van_ban.ma_loai_van_ban }}" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel{{ loai_van_ban.ma_loai_van_ban }}">Xác nhận xóa</h5>
+                   
+                    </div>
+                    <div class="modal-body">
+                        <p>Bạn có chắc chắn muốn xóa Loại Văn Bản <strong>{{ loai_van_ban.ten_loai_van_ban }}</strong>?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="{{ url_for('loai_van_ban_bp.xoa_loai_van_ban', ma_loai_van_ban=loai_van_ban.ma_loai_van_ban) }}" class="btn btn-danger">Xóa</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    
+    <script>
+        // Function to clear form input when modal is hidden
+        function clearFormInputs(modalId) {
+            document.querySelector(modalId).addEventListener('hidden.bs.modal', function (event) {
+                var form = this.querySelector('form');
+                if (form) {
+                    form.reset();
+                }
+            });
+        }
+    
+        // Show Add Loại Văn Bản Modal
+        function showAddModal() {
+            var modal = new bootstrap.Modal(document.getElementById('addModal'));
+            modal.show();
+        }
+
+        // Show Edit Loại Văn Bản Modal
+        function showEditModal(ma) {
+            var modal = new bootstrap.Modal(document.getElementById('editModal' + ma));
+            modal.show();
+        }
+
+        // Show Delete Loại Văn Bản Modal
+        function showDeleteModal(ma) {
+            var modal = new bootstrap.Modal(document.getElementById('deleteModal' + ma));
+            modal.show();
+        }
+    </script>
+{% endblock %}

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <title>{% block title %}Default Title{% endblock %}</title>
+    <!-- Load jQuery first -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!-- Then load Bootstrap JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Load Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="#">Admin Dashboard</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="#">Trang chủ</a>
+          </li>
+      
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('can_bo_bp.danh_sach_can_bo') }}">Cán bộ</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('don_vi_bp.danh_sach_don_vi') }}">Đơn vị</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('do_khan_bp.danh_sach_do_khan') }}">Độ khẩn</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('muc_do_quan_trong_bp.danh_sach_muc_do_quan_trong') }}">Mức độ quan trọng</a>
+          </li>
+         
+          <!-- Add more menu items as needed -->
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('can_bo_bp.dang_xuat')}} ">Đăng xuất</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <div class="container mt-4">
+      {% with messages = get_flashed_messages() %}
+      {% if messages %}
+          <div class="alert alert-{{ messages[0] }} text-center" role="alert">
+              {{ messages[0] }}
+          </div>
+      {% endif %}
+  {% endwith %}
+        {% block content %}
+        {% endblock %}
+    </div>
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container text-center">
+          <span class="text-muted">© 2024 Từ Minh Hải - Quản lý văn bản nội bộ</span>
+      </div>
+  </footer>
+  </body>
+</html>

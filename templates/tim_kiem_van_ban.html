@@ -1,0 +1,67 @@
+{% extends 'layout/layout.html' %}
+
+{% block title %}Tìm Kiếm Văn Bản{% endblock %}
+
+{% block content %}
+    <h1 class="text-center text-uppercase">Tìm Kiếm Văn Bản</h1>
+    
+    <form method="post" action="{{ url_for('van_ban_bp.tim_kiem') }}" class="mt-4">
+        <div class="mb-3">
+            <label for="search_query" class="form-label">Nhập nội dung tìm kiếm:</label>
+            <input type="text" class="form-control" id="search_query" name="search_query">
+        </div>
+        <button type="submit" class="btn btn-primary">Tìm Kiếm</button>
+    </form>
+
+    {% if search_results %}
+        <h2 class="mt-4">Kết Quả Tìm Kiếm</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Số Ký Hiệu</th>
+                    <th>Ngày Ban Hành</th>
+                    <th>Người Ký</th>
+                    <th>Đơn Vị Soạn Thảo</th>
+                    <th>Đơn Vị Ban Hành</th>
+                    <th>Lĩnh Vực</th>
+                    <th>Là Văn Bản QPPL</th>
+                    <th>Đường Dẫn File</th>
+                    <th>Số Văn Bản</th>
+                    <th>Loại Văn Bản</th>
+                    <th>Người Nhận</th>
+                    <th>Người Soạn</th>
+                    <th>Mức Độ Quan Trọng</th>
+                    <th>Độ Khẩn</th>
+                    <th>Là Văn Bản Đi</th>
+                    <th>Nơi Nhận</th>
+                    <th>Trích Yếu</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for van_ban in search_results %}
+                    <tr>
+                        <td>{{ van_ban.so_thu_tu_van_ban }}</td>
+                        <td>{{ van_ban.so_ky_hieu_van_ban }}</td>
+                        <td>{{ van_ban.ngay_ban_hanh }}</td>
+                        <td>{{ van_ban.nguoi_ky }}</td>
+                        <td>{{ van_ban.don_vi_soan_thao }}</td>
+                        <td>{{ van_ban.don_vi_ban_hanh }}</td>
+                        <td>{{ van_ban.ten_linh_vuc }}</td>
+                        <td>{{ van_ban.la_van_ban_qppl }}</td>
+                        <td><a href="{{ url_for('van_ban_bp.download_file', filename=van_ban.duong_dan_file.split('\\')[-1]) }}" download>{{ van_ban.duong_dan_file.split("\\")[-1] }}</a></td>
+                        <td>{{ van_ban.so_van_ban }}</td>
+                        <td>{{ van_ban.ten_loai_van_ban }}</td>
+                        <td>{{ van_ban.nguoi_nhan }}</td>
+                        <td>{{ van_ban.nguoi_soan }}</td>
+                        <td>{{ van_ban.ten_muc_do_quan_trong }}</td>
+                        <td>{{ van_ban.ten_do_khan }}</td>
+                        <td>{{ van_ban.la_van_ban_di }}</td>
+                        <td>{{ van_ban.noi_nhan }}</td>
+                        <td>{{ van_ban.trich_yeu }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}

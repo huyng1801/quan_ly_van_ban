@@ -1,0 +1,153 @@
+{% extends 'layout/layout.html' %}
+
+{% block title %}Danh Sách Tài Khoản{% endblock %}
+
+{% block content %}
+        <h1 class="text-center text-uppercase">Thêm Văn Bản Mới</h1>
+        <form method="post" action="{{ url_for('van_ban_bp.them_van_ban') }}" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="so_ky_hieu_van_ban">Số Ký Hiệu Văn Bản:</label>
+                <input type="text" class="form-control" name="so_ky_hieu_van_ban" required>
+            </div>
+
+          
+
+            <div class="form-group">
+                <label for="ngay_ban_hanh">Ngày Ban Hành:</label>
+                <input type="date" class="form-control" name="ngay_ban_hanh" required>
+            </div>
+
+            <div class="form-group">
+                <label for="ma_nguoi_ky">Người Ký:</label>
+                <select class="form-control" name="ma_nguoi_ky" required>
+                    {% for nguoi_ky in list_nguoi_ky %}
+                        <option value="{{ nguoi_ky.ma_can_bo }}">{{ nguoi_ky.ten_can_bo }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="ma_don_vi_soan_thao">Đơn Vị Soạn Thảo:</label>
+                <select class="form-control" name="ma_don_vi_soan_thao" required>
+                    {% for don_vi_soan_thao in list_don_vi_soan_thao %}
+                        <option value="{{ don_vi_soan_thao.ma_don_vi }}">{{ don_vi_soan_thao.ten_don_vi }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="ma_don_vi_ban_hanh">Đơn Vị Ban Hành:</label>
+                <select class="form-control" name="ma_don_vi_ban_hanh" required>
+                    {% for don_vi_ban_hanh in list_don_vi_ban_hanh %}
+                        <option value="{{ don_vi_ban_hanh.ma_don_vi }}">{{ don_vi_ban_hanh.ten_don_vi }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="ma_linh_vuc">Lĩnh Vực:</label>
+                <select class="form-control" name="ma_linh_vuc" required>
+                    {% for linh_vuc in list_linh_vuc %}
+                        <option value="{{ linh_vuc.ma_linh_vuc }}">{{ linh_vuc.ten_linh_vuc }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Là Văn Bản Quy Phạm Pháp Luật:</label>
+                <div class="form-check">
+                    <input type="radio" class="form-check-input" name="la_van_ban_qppl" value="1" id="la_van_ban_qppl_yes" required>
+                    <label class="form-check-label" for="la_van_ban_qppl_yes">Có</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" class="form-check-input" name="la_van_ban_qppl" value="0" id="la_van_ban_qppl_no" required>
+                    <label class="form-check-label" for="la_van_ban_qppl_no">Không</label>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="van_ban_file">Chọn File Văn Bản:</label>
+                <input type="file" class="form-control-file" name="van_ban_file" id="van_ban_file" accept=".docx, .xlsx, .pdf" required>
+            </div>
+            
+         
+            <div class="form-group">
+                <label for="so_van_ban">Số Văn Bản:</label>
+                <input type="text" class="form-control" name="so_van_ban" required>
+            </div>
+
+            <div class="form-group">
+                <label for="ma_loai_van_ban">Loại Văn Bản:</label>
+                <select class="form-control" name="ma_loai_van_ban" required>
+                    {% for loai_van_ban in list_loai_van_ban %}
+                        <option value="{{ loai_van_ban.ma_loai_van_ban }}">{{ loai_van_ban.ten_loai_van_ban }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="ma_nguoi_nhan">Người Nhận:</label>
+                <select class="form-control" name="ma_nguoi_nhan" required>
+                    {% for nguoi_nhan in list_nguoi_nhan %}
+                        <option value="{{ nguoi_nhan.ma_can_bo }}">{{ nguoi_nhan.ten_can_bo }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="ma_nguoi_soan">Người Soạn:</label>
+                <select class="form-control" name="ma_nguoi_soan" required>
+                    {% for nguoi_soan in list_nguoi_soan %}
+                        <option value="{{ nguoi_soan.ma_can_bo }}">{{ nguoi_soan.ten_can_bo }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="ma_muc_do_quan_trong">Mức Độ Quan Trọng:</label>
+                <select class="form-control" name="ma_muc_do_quan_trong" required>
+                    {% for muc_do_quan_trong in list_muc_do_quan_trong %}
+                        <option value="{{ muc_do_quan_trong.ma_muc_do_quan_trong }}">{{ muc_do_quan_trong.ten_muc_do_quan_trong }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="ma_do_khan">Độ Khẩn:</label>
+                <select class="form-control" name="ma_do_khan" required>
+                    {% for do_khan in list_do_khan %}
+                        <option value="{{ do_khan.ma_do_khan }}">{{ do_khan.ten_do_khan }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Là Văn Bản:</label>
+                <div class="form-check">
+                    <input type="radio" class="form-check-input" name="la_van_ban_di" value="1" id="la_van_ban_di_yes" required>
+                    <label class="form-check-label" for="la_van_ban_di_yes">Văn bản đi</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" class="form-check-input" name="la_van_ban_di" value="0" id="la_van_ban_di_no" required>
+                    <label class="form-check-label" for="la_van_ban_di_no">Văn bản nội bộ</label>
+                </div>
+            </div>
+            
+
+            <div class="form-group">
+                <label for="ma_noi_nhan">Nơi Nhận:</label>
+                <select class="form-control" name="ma_noi_nhan" required>
+                    {% for noi_nhan in list_noi_nhan %}
+                        <option value="{{ noi_nhan.ma_don_vi }}">{{ noi_nhan.ten_don_vi }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="trich_yeu">Trích Yếu:</label>
+                <textarea class="form-control" name="trich_yeu" rows="5" required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-3">Thêm Văn Bản</button>
+        </form>
+        {% endblock %}

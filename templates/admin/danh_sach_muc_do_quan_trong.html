@@ -1,0 +1,121 @@
+{% extends 'layout/admin_layout.html' %}
+
+{% block title %}Danh Sách Mức Độ Quan Trọng{% endblock %}
+
+{% block content %}
+    <h1 class="text-center text-uppercase">Danh Sách Mức Độ Quan Trọng</h1>
+    <button type="button" class="btn btn-success" onclick="showAddModal()">Thêm Mức Độ Quan Trọng</button>
+    <table class="table mt-3">
+        <thead>
+            <tr>
+                <th scope="col">Mã Mức Độ Quan Trọng</th>
+                <th scope="col">Tên Mức Độ Quan Trọng</th>
+                <th scope="col" class="text-center">Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for muc_do_quan_trong in list_muc_do_quan_trong %}
+                <tr>
+                    <td>{{ muc_do_quan_trong.ma_muc_do_quan_trong }}</td>
+                    <td>{{ muc_do_quan_trong.ten_muc_do_quan_trong }}</td>
+                    <td class="text-center">
+                        <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editCanBoModal{{ muc_do_quan_trong.ma_muc_do_quan_trong }}" onclick="showEditModal('{{ muc_do_quan_trong.ma_muc_do_quan_trong }}')">Sửa</a>
+                        <a href="#" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteCanBoModal{{ muc_do_quan_trong.ma_muc_do_quan_trong }}" onclick="showDeleteModal('{{ muc_do_quan_trong.ma_muc_do_quan_trong }}')">Xóa</a>
+                    </td>
+                    
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Add Modal -->
+    <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addodalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addModalLabel">Thêm Mức Độ Quan Trọng</h5>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="{{ url_for('muc_do_quan_trong_bp.them_muc_do_quan_trong') }}">
+                        <div class="form-group">
+                            <label for="ten_muc_do_quan_trong">Tên Mức Độ Quan Trọng:</label>
+                            <input type="text" name="ten_muc_do_quan_trong" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-3">Lưu</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% for muc_do_quan_trong in list_muc_do_quan_trong %}
+        <!-- Edit Modal for each Mức Độ Quan Trọng -->
+        <div class="modal fade" id="editModal{{ muc_do_quan_trong.ma_muc_do_quan_trong }}" tabindex="-1" role="dialog" aria-labelledby="editModalLabel{{ muc_do_quan_trong.ma_muc_do_quan_trong }}" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editModalLabel{{ muc_do_quan_trong.ma_muc_do_quan_trong }}">Sửa Mức Độ Quan Trọng</h5>
+                     
+                    </div>
+                    <div class="modal-body">
+                        <form method="post" action="{{ url_for('muc_do_quan_trong_bp.sua_muc_do_quan_trong', ma_muc_do_quan_trong=muc_do_quan_trong.ma_muc_do_quan_trong) }}">
+                            <div class="form-group">
+                                <label for="ten_muc_do_quan_trong">Tên Mức Độ Quan Trọng:</label>
+                                <input type="text" name="ten_muc_do_quan_trong" class="form-control" value="{{ muc_do_quan_trong.ten_muc_do_quan_trong }}" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary mt-5">Lưu</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete Modal for each Mức Độ Quan Trọng -->
+        <div class="modal fade" id="deleteModal{{ muc_do_quan_trong.ma_muc_do_quan_trong }}" tabindex="-1" role="dialog" aria-labelledby="deletedalLabel{{ muc_do_quan_trong.ma_muc_do_quan_trong }}" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel{{ muc_do_quan_trong.ma_muc_do_quan_trong }}">Xác nhận xóa</h5>
+                   
+                    </div>
+                    <div class="modal-body">
+                        <p>Bạn có chắc chắn muốn xóa Mức Độ Quan Trọng <strong>{{ muc_do_quan_trong.ten_muc_do_quan_trong }}</strong>?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="{{ url_for('muc_do_quan_trong_bp.xoa_muc_do_quan_trong', ma_muc_do_quan_trong=muc_do_quan_trong.ma_muc_do_quan_trong) }}" class="btn btn-danger">Xóa</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    
+    <script>
+        // Function to clear form input when modal is hidden
+        function clearFormInputs(modalId) {
+            document.querySelector(modalId).addEventListener('hidden.bs.modal', function (event) {
+                var form = this.querySelector('form');
+                if (form) {
+                    form.reset();
+                }
+            });
+        }
+    
+        // Show Add Mức Độ Quan Trọng Modal
+        function showAddModal() {
+            var modal = new bootstrap.Modal(document.getElementById('addModal'));
+            modal.show();
+        }
+
+        // Show Edit Mức Độ Quan Trọng Modal
+        function showEditModal(ma) {
+            var modal = new bootstrap.Modal(document.getElementById('editModal' + ma));
+            modal.show();
+        }
+
+        // Show Delete Mức Độ Quan Trọng Modal
+        function showDeleteModal(ma) {
+            var modal = new bootstrap.Modal(document.getElementById('deleteModal' + ma));
+            modal.show();
+        }
+    </script>
+{% endblock %}

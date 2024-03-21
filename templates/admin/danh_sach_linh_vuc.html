@@ -1,0 +1,121 @@
+{% extends 'layout/admin_layout.html' %}
+
+{% block title %}Danh Sách Lĩnh Vực{% endblock %}
+
+{% block content %}
+    <h1 class="text-center text-uppercase">Danh Sách Lĩnh Vực</h1>
+    <button type="button" class="btn btn-success" onclick="showAddModal()">Thêm Lĩnh Vực</button>
+    <table class="table mt-3">
+        <thead>
+            <tr>
+                <th scope="col">Mã Lĩnh Vực</th>
+                <th scope="col">Tên Lĩnh Vực</th>
+                <th scope="col" class="text-center">Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for linh_vuc in list_linh_vuc %}
+                <tr>
+                    <td>{{ linh_vuc.ma_linh_vuc }}</td>
+                    <td>{{ linh_vuc.ten_linh_vuc }}</td>
+                    <td class="text-center">
+                        <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editCanBoModal{{ linh_vuc.ma_linh_vuc }}" onclick="showEditModal('{{ linh_vuc.ma_linh_vuc }}')">Sửa</a>
+                        <a href="#" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteCanBoModal{{ linh_vuc.ma_linh_vuc }}" onclick="showDeleteModal('{{ linh_vuc.ma_linh_vuc }}')">Xóa</a>
+                    </td>
+                    
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Add Modal -->
+    <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addodalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addModalLabel">Thêm Lĩnh Vực</h5>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="{{ url_for('linh_vuc_bp.them_linh_vuc') }}">
+                        <div class="form-group">
+                            <label for="ten_linh_vuc">Tên Lĩnh Vực:</label>
+                            <input type="text" name="ten_linh_vuc" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-3">Lưu</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% for linh_vuc in list_linh_vuc %}
+        <!-- Edit Modal for each Lĩnh Vực -->
+        <div class="modal fade" id="editModal{{ linh_vuc.ma_linh_vuc }}" tabindex="-1" role="dialog" aria-labelledby="editModalLabel{{ linh_vuc.ma_linh_vuc }}" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editModalLabel{{ linh_vuc.ma_linh_vuc }}">Sửa Lĩnh Vực</h5>
+                     
+                    </div>
+                    <div class="modal-body">
+                        <form method="post" action="{{ url_for('linh_vuc_bp.sua_linh_vuc', ma_linh_vuc=linh_vuc.ma_linh_vuc) }}">
+                            <div class="form-group">
+                                <label for="ten_linh_vuc">Tên Lĩnh Vực:</label>
+                                <input type="text" name="ten_linh_vuc" class="form-control" value="{{ linh_vuc.ten_linh_vuc }}" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary mt-5">Lưu</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete Modal for each Lĩnh Vực -->
+        <div class="modal fade" id="deleteModal{{ linh_vuc.ma_linh_vuc }}" tabindex="-1" role="dialog" aria-labelledby="deletedalLabel{{ linh_vuc.ma_linh_vuc }}" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel{{ linh_vuc.ma_linh_vuc }}">Xác nhận xóa</h5>
+                   
+                    </div>
+                    <div class="modal-body">
+                        <p>Bạn có chắc chắn muốn xóa Lĩnh Vực <strong>{{ linh_vuc.ten_linh_vuc }}</strong>?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="{{ url_for('linh_vuc_bp.xoa_linh_vuc', ma_linh_vuc=linh_vuc.ma_linh_vuc) }}" class="btn btn-danger">Xóa</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    
+    <script>
+        // Function to clear form input when modal is hidden
+        function clearFormInputs(modalId) {
+            document.querySelector(modalId).addEventListener('hidden.bs.modal', function (event) {
+                var form = this.querySelector('form');
+                if (form) {
+                    form.reset();
+                }
+            });
+        }
+    
+        // Show Add Lĩnh Vực Modal
+        function showAddModal() {
+            var modal = new bootstrap.Modal(document.getElementById('addModal'));
+            modal.show();
+        }
+
+        // Show Edit Lĩnh Vực Modal
+        function showEditModal(ma) {
+            var modal = new bootstrap.Modal(document.getElementById('editModal' + ma));
+            modal.show();
+        }
+
+        // Show Delete Lĩnh Vực Modal
+        function showDeleteModal(ma) {
+            var modal = new bootstrap.Modal(document.getElementById('deleteModal' + ma));
+            modal.show();
+        }
+    </script>
+{% endblock %}

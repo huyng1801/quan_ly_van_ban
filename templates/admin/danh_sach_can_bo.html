@@ -1,0 +1,161 @@
+{% extends 'layout/admin_layout.html' %}
+
+{% block title %}Danh Sách Cán Bộ{% endblock %}
+
+{% block content %}
+    <h1 class="text-center text-uppercase">Danh Sách Cán Bộ</h1>
+    <button type="button" class="btn btn-success" onclick="showAddModal()">Thêm Cán Bộ</button>
+    <table class="table mt-3">
+        <thead>
+            <tr>
+                <th scope="col">Mã Cán Bộ</th>
+                <th scope="col">Tên Cán Bộ</th>
+                <th scope="col">Vai Trò</th>
+                <th scope="col" class="text-center">Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for can_bo in list_can_bo %}
+                <tr>
+                    <td>{{ can_bo.ma_can_bo }}</td>
+                    <td>{{ can_bo.ten_can_bo }}</td>
+                    <td>{{ can_bo.vai_tro }}</td>
+                    <td class="text-center">
+                        <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editCanBoModal{{ can_bo.ma_can_bo }}" onclick="showEditModal('{{ can_bo.ma_can_bo }}')">Sửa</a>
+                        <a href="#" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteCanBoModal{{ can_bo.ma_can_bo }}" onclick="showDeleteModal('{{ can_bo.ma_can_bo }}')">Xóa</a>
+                    </td>
+                    
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Add Modal -->
+    <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addodalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addModalLabel">Thêm Cán Bộ</h5>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="{{ url_for('can_bo_bp.them_can_bo') }}">
+                        <div class="form-group">
+                            <label for="ma_can_bo">Mã Cán Bộ:</label>
+                            <input type="text" name="ma_can_bo" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="ten_can_bo">Tên Cán Bộ:</label>
+                            <input type="text" name="ten_can_bo" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="mat_khau">Mật Khẩu:</label>
+                            <input type="password" name="mat_khau" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="vai_tro">Vai Trò:</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="vai_tro" value="Admin" checked>
+                                <label class="form-check-label">Admin</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="vai_tro" value="Nhân viên">
+                                <label class="form-check-label">Nhân viên</label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-3">Lưu</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% for can_bo in list_can_bo %}
+        <!-- Edit Modal for each Cán Bộ -->
+        <div class="modal fade" id="editModal{{ can_bo.ma_can_bo }}" tabindex="-1" role="dialog" aria-labelledby="editModalLabel{{ can_bo.ma_can_bo }}" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editModalLabel{{ can_bo.ma_can_bo }}">Sửa Cán Bộ</h5>
+                     
+                    </div>
+                    <div class="modal-body">
+                        <form method="post" action="{{ url_for('can_bo_bp.sua_can_bo', ma_can_bo=can_bo.ma_can_bo) }}">
+                            <div class="form-group">
+                                <label for="ma_can_bo">Mã Cán Bộ:</label>
+                                <input type="text" name="ma_can_bo" class="form-control" value="{{ can_bo.ma_can_bo }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="ten_can_bo">Tên Cán Bộ:</label>
+                                <input type="text" name="ten_can_bo" class="form-control" value="{{ can_bo.ten_can_bo }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="mat_khau">Mật Khẩu:</label>
+                                <input type="password" name="mat_khau" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="vai_tro">Vai Trò:</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="vai_tro" value="Admin" {% if can_bo.vai_tro == 'Admin' %}checked{% endif %}>
+                                    <label class="form-check-label">Admin</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="vai_tro" value="Nhân viên" {% if can_bo.vai_tro == 'Nhân viên' %}checked{% endif %}>
+                                    <label class="form-check-label">Nhân viên</label>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary mt-5">Lưu</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete Modal for each Cán Bộ -->
+        <div class="modal fade" id="deleteModal{{ can_bo.ma_can_bo }}" tabindex="-1" role="dialog" aria-labelledby="deletedalLabel{{ can_bo.ma_can_bo }}" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel{{ can_bo.ma_can_bo }}">Xác nhận xóa</h5>
+                   
+                    </div>
+                    <div class="modal-body">
+                        <p>Bạn có chắc chắn muốn xóa Cán Bộ <strong>{{ can_bo.ten_can_bo }}</strong>?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="{{ url_for('can_bo_bp.xoa_can_bo', ma_can_bo=can_bo.ma_can_bo) }}" class="btn btn-danger">Xóa</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    
+    <script>
+        // Function to clear form input when modal is hidden
+        function clearFormInputs(modalId) {
+            document.querySelector(modalId).addEventListener('hidden.bs.modal', function (event) {
+                var form = this.querySelector('form');
+                if (form) {
+                    form.reset();
+                }
+            });
+        }
+    
+        // Show Add Cán Bộ Modal
+        function showAddModal() {
+            var modal = new bootstrap.Modal(document.getElementById('addModal'));
+            modal.show();
+        }
+
+        // Show Edit Cán Bộ Modal
+        function showEditModal(ma) {
+            var modal = new bootstrap.Modal(document.getElementById('editModal' + ma));
+            modal.show();
+        }
+
+        // Show Delete Cán Bộ Modal
+        function showDeleteModal(ma) {
+            var modal = new bootstrap.Modal(document.getElementById('deleteModal' + ma));
+            modal.show();
+        }
+    </script>
+{% endblock %}
